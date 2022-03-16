@@ -27,7 +27,7 @@ ui <- dashboardPage(
           textInput(
             "original",
             label = "Original Image URL"
-            # ,value = "https://cdn.discordapp.com/attachments/944672779826003968/953446500556484638/MonthlySeaIceExtent_PolicyViz-1140x700.png"
+            ,placeholder = "https://cdn.discordapp.com/attachments/944672779826003968/953446500556484638/MonthlySeaIceExtent_PolicyViz-1140x700.png"
             )
           ),
         column(
@@ -35,7 +35,7 @@ ui <- dashboardPage(
           textInput(
             "replication",
             label = "Contestant Image URL"
-            # ,value = "https://cdn.discordapp.com/attachments/944672779826003968/953456772780281896/plot_zoom_png.png"
+            ,placeholder = "https://cdn.discordapp.com/attachments/944672779826003968/953456772780281896/plot_zoom_png.png"
             )),
         column(width = 4,numericInput("fuzz", label = "Fuzz Factor (0-100)", value = 10, min = 0, max = 100, step = 11))
       ),
@@ -60,8 +60,9 @@ server <- function(input, output, session) {
 
   output$comp_image <- renderImage({
     req(rv$out)
-    x <- rv$out$image_comparison |>
+    x <-
       magick::image_write(
+        rv$out$image_comparison,
         tempfile(fileext = "png"),
         format = "png"
       )
