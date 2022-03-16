@@ -56,7 +56,6 @@ replicate
 # for possible metrics
 ae <- magick::image_compare_dist(original, replicate, metric = "AE", fuzz = fuzz)$distortion
 similarity <- 1 - ae / (orig_info$width * orig_info$height)
-
 sim_string <- paste(scales::percent(similarity, accuracy = 0.1), "of pixels of the resized image are similar.")
 ```
 
