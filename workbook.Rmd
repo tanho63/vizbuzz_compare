@@ -1,0 +1,72 @@
+---
+title: "Vizz Buzz Image Comparison Tool"
+author: "Sebastian Carl"
+date: "2022-03-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Image Paths
+
+```{r}
+path_to_original_image <- "https://cdn.discordapp.com/attachments/944672779826003968/953446500556484638/MonthlySeaIceExtent_PolicyViz-1140x700.png"
+path_to_replicate_image <- "https://cdn.discordapp.com/attachments/944672779826003968/953456772780281896/plot_zoom_png.png"
+```
+
+```{r include=FALSE}
+# fuzz = relative color distance (value between 0 and 100) to be considered 
+# similar in the filling algorithm
+# see https://imagemagick.org/script/command-line-options.php#fuzz
+# Change this, re-Knit the file and see what it does in the comparison image
+fuzz <- 10
+```
+
+```{r include=FALSE}
+# Read in Images, Resize Replicate
+original <- magick::image_read(path_to_original_image)
+orig_info <- magick::image_info(original)
+replicate <- magick::image_read(path_to_replicate_image) |> 
+  magick::image_resize(
+    geometry = magick::geometry_size_pixels(
+      width = orig_info$width, height = orig_info$height, preserve_aspect = FALSE
+    )
+  )
+```
+
+## Original Image
+
+```{r echo=FALSE}
+original
+```
+
+## Replicated Image (Resized to Match Size of Original)
+
+```{r echo=FALSE}
+replicate
+```
+
+## Comparison
+
+```{r include=FALSE}
+# ae = absolute error count, number of different pixels (-fuzz affected)
+# see https://imagemagick.org/script/command-line-options.php#metric
+# for possible metrics
+ae <- magick::image_compare_dist(original, replicate, metric = "AE", fuzz = fuzz)$distortion
+similarity <- 1 - ae / (orig_info$width * orig_info$height)
+
+sim_string <- paste(scales::percent(similarity, accuracy = 0.1), "of pixels of the resized image are similar.")
+```
+
+```{r echo=FALSE}
+magick::image_compare(original, replicate, metric = "AE", fuzz = fuzz)
+```
+
+### `r scales::percent(similarity, accuracy = 0.1)` of pixels of the resized image are similar
+
+```{r echo=FALSE}
+cli::cli_alert_info("Colors within a relative distance of {fuzz}% are considered similar.")
+```
+
