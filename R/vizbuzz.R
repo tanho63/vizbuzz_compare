@@ -15,12 +15,13 @@ vizbuzz_compare <- function(path_to_original_image, path_to_replicate_image, fuz
   original <- magick::image_read(path_to_original_image)
   orig_info <- magick::image_info(original)
 
-  replicate <- magick::image_read(path_to_replicate_image) |>
-    magick::image_resize(
-      geometry = magick::geometry_size_pixels(
-        width = orig_info$width, height = orig_info$height, preserve_aspect = FALSE
-      )
-    )
+  replicate <- magick::image_resize(
+    magick::image_read(path_to_replicate_image),
+    geometry = magick::geometry_size_pixels(
+      width = orig_info$width,
+      height = orig_info$height,
+      preserve_aspect = FALSE
+    ))
 
   ae <- magick::image_compare_dist(original, replicate, metric = "AE", fuzz = fuzz)$distortion
   similarity <- 1 - ae / (orig_info$width * orig_info$height)
