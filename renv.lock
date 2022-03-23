@@ -640,6 +640,18 @@
       "RemoteSha": "1.4.0",
       "Hash": "0759e6b6c0957edb1311028a49a35e76"
     },
+    "summaryBox": {
+      "Package": "summaryBox",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "deepanshu88",
+      "RemoteRepo": "summaryBox",
+      "RemoteRef": "main",
+      "RemoteSha": "d56c6ad49742aa3ba95761eb051689e3c1f2eee4",
+      "Hash": "0189d2d2b5f2d36ddc1903dbdabb96bf"
+    },
     "sys": {
       "Package": "sys",
       "Version": "3.4",

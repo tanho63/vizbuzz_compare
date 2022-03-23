@@ -29,14 +29,23 @@ vizbuzz_compare <- function(path_to_original_image, path_to_replicate_image, fuz
 
   image_comparison <- magick::image_compare(original, replicate, metric = "AE", fuzz = fuzz)
 
-  structure(
+  out <- structure(
     list(
       image_comparison = image_comparison,
       sim_string = sim_string,
       original = original,
-      replicate = replicate
+      replicate = replicate,
+      similarity = similarity
     ),
     class = c("vizbuzz_output")
   )
+  return(out)
+}
 
+#' @export
+#' @keywords internal
+print.vizbuzz_output <- function(x,...){
+  cat("<VizBuzz Output>",sep = "\n")
+  cat(x$sim_string,sep = "\n")
+  str(x,max.level = 1)
 }

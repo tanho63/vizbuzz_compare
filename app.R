@@ -1,10 +1,11 @@
 library(shiny)
 library(bs4Dash)
+library(summaryBox)
 
 ui <- dashboardPage(
   dark = TRUE,
   header = dashboardHeader(
-    title = h3("VizBuzz: Imagemagick Comparison Tool"),
+    title = h3("VizBuzz: Imagemagick Comparison Tool",style = "padding:5px 20px 5px 20px;"),
     # skin = "dark",
     # status = "gray-dark",
     fixed = TRUE),
@@ -18,7 +19,12 @@ ui <- dashboardPage(
       fluidRow(
         "This app uses Imagemagick to compare similarity between two images.",
         br(),
-        "Image code by @mrcaseb, app by @_TanHo, primarily designed for VizBuzz as hosted by @nickwan."
+        shiny::markdown(
+          "Image code by [@mrcaseb](https://twitter.com/mrcaseb), app by [@_TanHo](https://twitter.com/_TanHo), primarily designed for VizBuzz as hosted by [@nickwan](https://twitter.com/nickwan) on [Twitch](https://twitch.tv/nickwan_datasci).
+
+          Code repo and issues here: <https://github.com/tanho63/vizbuzz_compare>
+          "
+        )
       ),
       hr(),
       fluidRow(
@@ -27,7 +33,6 @@ ui <- dashboardPage(
           textInput(
             "original",
             label = "Original Image URL"
-            # ,value = "https://cdn.discordapp.com/attachments/944672779826003968/953446500556484638/MonthlySeaIceExtent_PolicyViz-1140x700.png"
           )
         ),
         column(
@@ -35,14 +40,17 @@ ui <- dashboardPage(
           textInput(
             "replication",
             label = "Contestant Image URL"
-            # ,value = "https://cdn.discordapp.com/attachments/944672779826003968/953456772780281896/plot_zoom_png.png"
           )),
-        column(width = 4,numericInput("fuzz", label = "Fuzz Factor (0-100)", value = 10, min = 0, max = 100, step = 11))
+        column(width = 4,numericInput("fuzz", label = "Fuzz Factor (0-100)", value = 25, min = 0, max = 100, step = 11))
       ),
       footer = div(style = "text-align:center;",
                    actionButton("run","Run Comparison"))
     ),
-    uiOutput("comparison")
+    br(),
+
+    uiOutput("summarybox"),
+    br(),
+    imageOutput("comp_image",width = "100%")
   )
 )
 
@@ -54,8 +62,11 @@ server <- function(input, output, session) {
     req(input$original)
     req(input$replication)
 
-    rv$out <- vizbuzz_compare(input$original,input$replication,input$fuzz)
+    showModal(modalDialog("Comparing..."))
 
+    rv$out <- vizbuzz_compare(input$original,input$replication,input$fuzz)
+    Sys.sleep(1)
+    removeModal()
   })
 
   output$comp_image <- renderImage({
@@ -69,14 +80,21 @@ server <- function(input, output, session) {
   },
   deleteFile = TRUE)
 
-  output$comparison <- renderUI({
+
+  output$summarybox <- renderUI({
     req(rv$out)
-    box(
-      title = glue::glue("Comparison"),
-      width = 12,
-      em(rv$out$sim_string),
-      br(),
-      imageOutput("comp_image",width = '100%',height = "auto")
+    fluidRow(
+      column(
+        width = 12,
+        # style = "text-align:center;",
+        summaryBox3(
+          title = "Similarity",
+          value = scales::percent(rv$out$similarity, accuracy = 0.1),
+          # subtitle = "percentage of resized pixels are similar",
+          # fill = TRUE,
+          style = "info"
+        )
+      )
     )
   })
 
