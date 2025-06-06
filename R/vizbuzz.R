@@ -15,6 +15,19 @@ vizbuzz_compare <- function(path_to_original_image, path_to_replicate_image, fuz
   original <- magick::image_read(path_to_original_image)
   orig_info <- magick::image_info(original)
 
+  if (orig_info$width > 1200 || orig_info$height > 1200) {
+    cli::cli_inform("Original image is too large, resizing to max 1200x1200")
+    original <- magick::image_resize(
+      original,
+      geometry = magick::geometry_size_pixels(
+        width = 1200,
+        height = 1200,
+        preserve_aspect = TRUE
+      )
+    )
+    orig_info <- magick::image_info(original)
+  }
+
   replicate <- magick::image_resize(
     magick::image_read(path_to_replicate_image),
     geometry = magick::geometry_size_pixels(

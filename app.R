@@ -17,10 +17,11 @@ ui <- dashboardPage(
       status = "gray-dark",
       closable = FALSE,
       fluidRow(
-        "This app uses Imagemagick to compare similarity between two images.",
-        br(),
         shiny::markdown(
-          "Image code by [@mrcaseb](https://twitter.com/mrcaseb), app by [@_TanHo](https://twitter.com/_TanHo), primarily designed for VizBuzz as hosted by [@nickwan](https://twitter.com/nickwan) on [Twitch](https://twitch.tv/nickwan_datasci).
+          "
+          This app uses Imagemagick to compare similarity between two images.
+
+          Image code by [@mrcaseb](https://twitter.com/mrcaseb), app by [@_TanHo](https://twitter.com/_TanHo), primarily designed for VizBuzz as hosted by [@nickwan](https://twitter.com/nickwan) on [Twitch](https://twitch.tv/nickwan_datasci).
 
           Code repo and issues here: <https://github.com/tanho63/vizbuzz_compare>
           "
