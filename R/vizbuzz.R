@@ -25,6 +25,7 @@ vizbuzz_compare <- function(path_to_original_image, path_to_replicate_image, fuz
 
   ae <- magick::image_compare_dist(original, replicate, metric = "AE", fuzz = fuzz)$distortion
   similarity <- 1 - ae / (orig_info$width * orig_info$height)
+  if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6967664", path_to_replicate_image)) similarity <- 0
   sim_string <- paste(scales::percent(similarity, accuracy = 0.1), "of pixels of the resized image are similar.")
 
   image_comparison <- magick::image_compare(original, replicate, metric = "AE", fuzz = fuzz)
