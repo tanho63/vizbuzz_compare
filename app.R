@@ -67,7 +67,21 @@ server <- function(input, output, session) {
     rv$out <- vizbuzz_compare(input$original,input$replication,input$fuzz)
     Sys.sleep(1)
     removeModal()
+
+    if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6967664", input$replication)) {
+      showModal(modalDialog("Applying Quang penalty..."))
+      Sys.sleep(3)
+      removeModal()
+    }
+
+    if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2942617", input$replication)) {
+      showModal(modalDialog("Adding Tantastic bonus points..."))
+      Sys.sleep(3)
+      removeModal()
+    }
+
   })
+
 
   output$comp_image <- renderImage({
     req(rv$out)
