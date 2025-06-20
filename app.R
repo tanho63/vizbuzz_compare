@@ -81,6 +81,12 @@ server <- function(input, output, session) {
       removeModal()
     }
 
+    if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F517828", input$replication)) {
+      showModal(modalDialog("Adding Tantastic bonus points..."))
+      Sys.sleep(3)
+      removeModal()
+    }
+
   })
 
 
