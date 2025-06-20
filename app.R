@@ -75,8 +75,14 @@ server <- function(input, output, session) {
       removeModal()
     }
 
+    if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3542591", input$replication)) {
+      showModal(modalDialog("Eww, Julia..."))
+      Sys.sleep(3)
+      removeModal()
+    }
+
     if(grepl("https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2942617", input$replication)) {
-      showModal(modalDialog("Adding Tantastic bonus points..."))
+      showModal(modalDialog("Definitely not adding any homefield advantages..."))
       Sys.sleep(3)
       removeModal()
     }
